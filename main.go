@@ -2,20 +2,17 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"log"
 
-	"github.com/gorilla/mux"
+	"github.com/brandenc40/safer"
 )
 
-func crawlForMCMX(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	mcmx := vars["mcmx"]
-	fmt.Fprintf(w, "MC is %s",mcmx)
-}
+func main() {
+	client := safer.NewClient()
 
-func main()  {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/{mcmx}", crawlForMCMX)
-	http.ListenAndServe(":8080", router)
-
+	snapshot, err := client.GetCompanyByMCMX("133655")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Printf("%#v", snapshot)
 }
